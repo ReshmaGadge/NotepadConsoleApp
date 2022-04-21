@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "E:\\Reshma\\github\\ConsoleApp\\ConsoleApp.csproj": {}
+    "E:\\Reshma\\github\\NotepadConsoleApp\\ConsoleApp.csproj": {}
   },
   "projects": {
-    "E:\\Reshma\\github\\ConsoleApp\\ConsoleApp.csproj": {
+    "E:\\Reshma\\github\\NotepadConsoleApp\\ConsoleApp.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "E:\\Reshma\\github\\ConsoleApp\\ConsoleApp.csproj",
+        "projectUniqueName": "E:\\Reshma\\github\\NotepadConsoleApp\\ConsoleApp.csproj",
         "projectName": "ConsoleApp",
-        "projectPath": "E:\\Reshma\\github\\ConsoleApp\\ConsoleApp.csproj",
+        "projectPath": "E:\\Reshma\\github\\NotepadConsoleApp\\ConsoleApp.csproj",
         "packagesPath": "C:\\Users\\Vasudev\\.nuget\\packages\\",
-        "outputPath": "E:\\Reshma\\github\\ConsoleApp\\obj\\",
+        "outputPath": "E:\\Reshma\\github\\NotepadConsoleApp\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\Vasudev\\AppData\\Roaming\\NuGet\\NuGet.Config",

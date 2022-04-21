@@ -1,0 +1,15 @@
+E:\Reshma\github\NotepadConsoleApp\bin\Debug\net6.0\ConsoleApp.exe
+E:\Reshma\github\NotepadConsoleApp\bin\Debug\net6.0\ConsoleApp.deps.json
+E:\Reshma\github\NotepadConsoleApp\bin\Debug\net6.0\ConsoleApp.runtimeconfig.json
+E:\Reshma\github\NotepadConsoleApp\bin\Debug\net6.0\ConsoleApp.dll
+E:\Reshma\github\NotepadConsoleApp\bin\Debug\net6.0\ConsoleApp.pdb
+E:\Reshma\github\NotepadConsoleApp\obj\Debug\net6.0\ConsoleApp.csproj.AssemblyReference.cache
+E:\Reshma\github\NotepadConsoleApp\obj\Debug\net6.0\ConsoleApp.GeneratedMSBuildEditorConfig.editorconfig
+E:\Reshma\github\NotepadConsoleApp\obj\Debug\net6.0\ConsoleApp.AssemblyInfoInputs.cache
+E:\Reshma\github\NotepadConsoleApp\obj\Debug\net6.0\ConsoleApp.AssemblyInfo.cs
+E:\Reshma\github\NotepadConsoleApp\obj\Debug\net6.0\ConsoleApp.csproj.CoreCompileInputs.cache
+E:\Reshma\github\NotepadConsoleApp\obj\Debug\net6.0\ConsoleApp.dll
+E:\Reshma\github\NotepadConsoleApp\obj\Debug\net6.0\refint\ConsoleApp.dll
+E:\Reshma\github\NotepadConsoleApp\obj\Debug\net6.0\ConsoleApp.pdb
+E:\Reshma\github\NotepadConsoleApp\obj\Debug\net6.0\ConsoleApp.genruntimeconfig.cache
+E:\Reshma\github\NotepadConsoleApp\obj\Debug\net6.0\ref\ConsoleApp.dll

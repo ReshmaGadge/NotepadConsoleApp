@@ -60,6 +60,7 @@ namespace AutoNotepadApp
         const int WM_SETTEXT = 0X000C;
         private const int BN_CLICKED = 245;
         private const int BM_CLICK = 0x00F5;
+        private const string FILEPATH = "%UserProfile%\\Desktop\\test";
 
         public static string GetActiveWindowTitle(IntPtr handle)
         {
@@ -105,21 +106,18 @@ namespace AutoNotepadApp
                     p = new Process();
                     p.StartInfo.FileName = "notepad";
                     p.Start();
+                    Console.WriteLine("Starting notepad ...");
                 }
                 else
                 {
                     Console.WriteLine("Notepad already running !!");
                 }
 
-
-                //Process.Start("notepad.exe");
                 processes = Process.GetProcessesByName("notepad");
                 System.Threading.Thread.Sleep(100);
 
                 if (processes.Length != 0)
                 {
-                    Console.WriteLine("Notepad Launched successfully !!");
-
                     // Get Notepad window
                     IntPtr hWnd = FindWindow("Notepad", null); //to get a handle of the Notepad.
 
@@ -127,10 +125,12 @@ namespace AutoNotepadApp
                     IntPtr child = FindWindowEx(processes[0].MainWindowHandle, new IntPtr(0), "Edit", null); //to get a handle to the Notepad Menu.
 
                     IntPtr menu = GetMenu(hWnd);
-                    IntPtr subMenu = GetSubMenu(menu, 0);//0 = first menu item - File/New
+                    IntPtr subMenu = GetSubMenu(menu, 0);//0 = first menu item - File/New                    
                     uint menuItemID = GetMenuItemID(subMenu, 0);
+                    Console.WriteLine("Selecting File > New");
                     SendMessage(hWnd, 0x0111, 0x20000000 + menuItemID, menu); // Stimulate clicking File Menu
 
+                    Console.WriteLine("Sending 'Hello World' message to notepad");
                     SendMessage(child, WM_SETTEXT, 0, "Hello World");
                     System.Threading.Thread.Sleep(300);
 
@@ -138,43 +138,39 @@ namespace AutoNotepadApp
                     //SendMessage(hWnd, 0x0111, 0x20000000 + menuItemID1, menu); // Stimulate clicking Save As submenu
                     //System.Threading.Thread.Sleep(100);
 
+                    Console.WriteLine("Selecting File > Save As");
                     PostMessage(hWnd, 0x0111, 0x0003, 0x0);// Stimulate clicking Save As submenu
 
                     System.Threading.Thread.Sleep(100);
-                    
+
+                    #region navigating through childs of save as window
                     IntPtr saveAsWnd = FindWindow("#32770", "Save As");
-                    Console.WriteLine(GetActiveWindowTitle(saveAsWnd));
                     System.Threading.Thread.Sleep(100);
                     IntPtr DUIViewWnd = FindWindowEx(saveAsWnd, IntPtr.Zero, "DUIViewWndClassName", null);
-                    Console.WriteLine(GetActiveWindowTitle(DUIViewWnd));
                     System.Threading.Thread.Sleep(100);
                     IntPtr DirectUIHWND = FindWindowEx(DUIViewWnd, IntPtr.Zero, "DirectUIHWND", null);
-                    Console.WriteLine(GetActiveWindowTitle(DirectUIHWND));
                     System.Threading.Thread.Sleep(100);
                     IntPtr FloatNotifySinkWnd = FindWindowEx(DirectUIHWND, IntPtr.Zero, "FloatNotifySink", null);
-                    Console.WriteLine(GetActiveWindowTitle(FloatNotifySinkWnd));
                     System.Threading.Thread.Sleep(100);
                     IntPtr ComboBoxWnd = FindWindowEx(FloatNotifySinkWnd, IntPtr.Zero, "ComboBox", null);
-                    Console.WriteLine(GetActiveWindowTitle(ComboBoxWnd));
                     System.Threading.Thread.Sleep(100);
                     IntPtr edithWnd = FindWindowEx(ComboBoxWnd, IntPtr.Zero, "Edit", null);
-                    Console.WriteLine(GetActiveWindowTitle(edithWnd));
                     System.Threading.Thread.Sleep(100);
+                    #endregion
 
                     //IntPtr edithWnd = IntPtr.Zero;
                     //edithWnd = FindWindowEx(saveAsWnd, new IntPtr(0), "ComboBox", "*.txt");
                     //edithWnd = FindWindowByIndex(saveAsWnd, 4);
 
-                    Console.WriteLine(GetActiveWindowTitle(edithWnd));
-                    SendMessage(edithWnd, WM_SETTEXT, 0, "E:\\Reshma\\test");
-                    System.Threading.Thread.Sleep(100);
+                    Console.WriteLine("Set file path with filename");
+                    SendMessage(edithWnd, WM_SETTEXT, 0, FILEPATH);
+                    System.Threading.Thread.Sleep(1000);
 
+                    Console.WriteLine("Saving file by clicking save button");
                     IntPtr saveBN = FindWindowEx(saveAsWnd, IntPtr.Zero, "Button", "&Save");
                     SendMessage(saveBN, BM_CLICK, 0, null);
 
                 }
-
-                //p.WaitForExit();
 
                 if (processes.Length == 0)
                 {
