@@ -33,9 +33,6 @@ namespace AutoNotepadApp
         [DllImport("User32.dll")]
         public static extern uint GetMenuItemID(IntPtr hMenu, int nPos);
 
-        //[DllImport("user32.dll")]
-        //public static extern int SendMessage(IntPtr hWnd, String wMsg, IntPtr wParam, IntPtr lParam);
-
         [DllImport("user32.dll", EntryPoint = "FindWindowEx")]
         public static extern IntPtr FindWindowEx(IntPtr hwndParent, IntPtr hwndChildAfter, string lpszClass, string lpszWindow);
         [DllImport("User32.dll")]
@@ -44,35 +41,18 @@ namespace AutoNotepadApp
         public static extern int SendMessage(IntPtr hWnd, uint uMsg, uint wParam, IntPtr lParam);
 
         [DllImport("user32.dll")]
-        //public static extern IntPtr PostMessage(IntPtr hWnd, uint Msg, IntPtr wParam, IntPtr lParam);
         public static extern int PostMessage(IntPtr hWnd, int uMsg, int wParam, int lParam);
 
         [DllImport("user32.dll")]
-        static extern IntPtr GetLastActivePopup(IntPtr hWnd);
-
-        [DllImport("user32.dll")]
-        public static extern IntPtr GetForegroundWindow();
-
-        [DllImport("user32.dll")]
         public static extern Int32 GetWindowText(IntPtr hWnd, StringBuilder s, int nMaxCount);
+
         #endregion
 
-        const int WM_SETTEXT = 0X000C;
-        private const int BN_CLICKED = 245;
+        #region Constants
+        private const int WM_SETTEXT = 0X000C;
         private const int BM_CLICK = 0x00F5;
         private const string FILENAME = "test.txt";
-
-        public static string GetActiveWindowTitle(IntPtr handle)
-        {
-            const int nChars = 256;
-            StringBuilder Buff = new StringBuilder(nChars);
-
-            if (GetWindowText(handle, Buff, nChars) > 0)
-            {
-                return Buff.ToString();
-            }
-            return null;
-        }
+        #endregion
 
         static IntPtr FindWindowByIndex(IntPtr hWndParent, int index)
         {
@@ -125,19 +105,19 @@ namespace AutoNotepadApp
                     IntPtr hWnd = FindWindow("Notepad", null); //to get a handle of the Notepad.
 
                     System.Threading.Thread.Sleep(100);
-                    IntPtr child = FindWindowEx(processes[0].MainWindowHandle, new IntPtr(0), "Edit", null); //to get a handle to the Notepad Menu.
-
-                    IntPtr menu = GetMenu(hWnd);
-                    IntPtr subMenu = GetSubMenu(menu, 0);//0 = first menu item - File/New                    
-                    uint menuItemID = GetMenuItemID(subMenu, 0);
+                    
+                    IntPtr menu = GetMenu(hWnd);            //to get a handle of the Menu of the Notepad.
+                    IntPtr firstMenu = GetSubMenu(menu, 0);   //to get a handle of the first Menu item - File/New                    
+                    uint menuItemID = GetMenuItemID(firstMenu, 0);
                     Console.WriteLine("Selecting File > New");
                     SendMessage(hWnd, 0x0111, 0x20000000 + menuItemID, menu); // Stimulate clicking File Menu
 
+                    IntPtr child = FindWindowEx(processes[0].MainWindowHandle, new IntPtr(0), "Edit", null); //to get a handle to the New Sub Menu.
                     Console.WriteLine("Sending 'Hello World' message to notepad");
                     SendMessage(child, WM_SETTEXT, 0, "Hello World");
                     System.Threading.Thread.Sleep(300);
 
-                    uint menuItemID1 = GetMenuItemID(subMenu, 4);//2 = second item in submenu - File/Save As
+                    //uint menuItemID1 = GetMenuItemID(firstMenu, 4);//2 = second item in submenu - File/Save As
                     //SendMessage(hWnd, 0x0111, 0x20000000 + menuItemID1, menu); // Stimulate clicking Save As submenu
                     //System.Threading.Thread.Sleep(100);
 
@@ -166,24 +146,23 @@ namespace AutoNotepadApp
                     //edithWnd = FindWindowByIndex(saveAsWnd, 4);
 
                     Console.WriteLine("Set file path with filename");
-                    SendMessage(edithWnd, WM_SETTEXT, 0, file);
+                    SendMessage(edithWnd, WM_SETTEXT, 0, file);  // set file path to File Name field.
                     System.Threading.Thread.Sleep(1000);
 
                     Console.WriteLine("Saving file by clicking save button");
                     IntPtr saveBN = FindWindowEx(saveAsWnd, IntPtr.Zero, "Button", "&Save");
-                    PostMessage(saveBN, BM_CLICK, 0, 0);
+                    PostMessage(saveBN, BM_CLICK, 0, 0);   // Stimulate clicking Save Button.
                     System.Threading.Thread.Sleep(1000);
 
-                    IntPtr confirmSaveAsWnd = FindWindow("#32770", "Confirm Save As");
-
-                    if(confirmSaveAsWnd != IntPtr.Zero)
+                    IntPtr confirmSaveAsWnd = FindWindow("#32770", "Confirm Save As");  // to get handle of Confirm Save As dialog 
+                    if (confirmSaveAsWnd != IntPtr.Zero)
                     {
                         DirectUIHWND = FindWindowEx(confirmSaveAsWnd, IntPtr.Zero, "DirectUIHWND", null);
                         IntPtr CtrlNotifySink = FindWindowByIndex(DirectUIHWND, 7);
-                        IntPtr yesBN = FindWindowEx(CtrlNotifySink, IntPtr.Zero, "Button", "&Yes");
+                        IntPtr yesBN = FindWindowEx(CtrlNotifySink, IntPtr.Zero, "Button", "&Yes"); // to get handle of Yes button on Confirm Save As dialog
                         Console.WriteLine("File already exists, overwriting by clicking 'Yes'");
                         System.Threading.Thread.Sleep(1000);
-                        SendMessage(yesBN, BM_CLICK, 0, null);
+                        SendMessage(yesBN, BM_CLICK, 0, null);  //Stimulate clicking Yes Button.
                         System.Threading.Thread.Sleep(2000);
                     }
 
@@ -214,7 +193,5 @@ namespace AutoNotepadApp
                          ex.Message, ex.StackTrace.ToString());
             }
         }
-
-
     }
 }
