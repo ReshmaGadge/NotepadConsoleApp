@@ -60,7 +60,7 @@ namespace AutoNotepadApp
         const int WM_SETTEXT = 0X000C;
         private const int BN_CLICKED = 245;
         private const int BM_CLICK = 0x00F5;
-        private const string FILEPATH = "%UserProfile%\\Desktop\\test";
+        private const string FILENAME = "test.txt";
 
         public static string GetActiveWindowTitle(IntPtr handle)
         {
@@ -84,8 +84,8 @@ namespace AutoNotepadApp
                 IntPtr result = IntPtr.Zero;
                 do
                 {
-                    result = FindWindowEx(hWndParent, result, "Button", null);
-                    Console.WriteLine(GetActiveWindowTitle(result));
+                    result = FindWindowEx(hWndParent, result, "CtrlNotifySink", null);
+                    
                     if (result != IntPtr.Zero)
                         ++ct;
                 }
@@ -96,6 +96,9 @@ namespace AutoNotepadApp
 
         static void Main(string[] args)
         {
+            var workingDirectory = Environment.CurrentDirectory;
+            var file = $"{workingDirectory}\\{FILENAME}";
+
             Process p = null;
             try
             {
@@ -163,12 +166,35 @@ namespace AutoNotepadApp
                     //edithWnd = FindWindowByIndex(saveAsWnd, 4);
 
                     Console.WriteLine("Set file path with filename");
-                    SendMessage(edithWnd, WM_SETTEXT, 0, FILEPATH);
+                    SendMessage(edithWnd, WM_SETTEXT, 0, file);
                     System.Threading.Thread.Sleep(1000);
 
                     Console.WriteLine("Saving file by clicking save button");
                     IntPtr saveBN = FindWindowEx(saveAsWnd, IntPtr.Zero, "Button", "&Save");
-                    SendMessage(saveBN, BM_CLICK, 0, null);
+                    PostMessage(saveBN, BM_CLICK, 0, 0);
+                    System.Threading.Thread.Sleep(1000);
+
+                    IntPtr confirmSaveAsWnd = FindWindow("#32770", "Confirm Save As");
+
+                    if(confirmSaveAsWnd != IntPtr.Zero)
+                    {
+                        DirectUIHWND = FindWindowEx(confirmSaveAsWnd, IntPtr.Zero, "DirectUIHWND", null);
+                        IntPtr CtrlNotifySink = FindWindowByIndex(DirectUIHWND, 7);
+                        IntPtr yesBN = FindWindowEx(CtrlNotifySink, IntPtr.Zero, "Button", "&Yes");
+                        Console.WriteLine("File already exists, overwriting by clicking 'Yes'");
+                        System.Threading.Thread.Sleep(1000);
+                        SendMessage(yesBN, BM_CLICK, 0, null);
+                        System.Threading.Thread.Sleep(2000);
+                    }
+
+                    if(File.Exists(file))
+                    {
+                        Console.WriteLine("Task Completed Successfully!!!");
+                    }
+                    else
+                    {
+                        Console.WriteLine("Task failed :(");
+                    }
 
                 }
 
