@@ -188,7 +188,7 @@ namespace AutoNotepadApp
                     }
 
                     // to close notepad file
-                    System.Threading.Thread.Sleep(2000);
+                    System.Threading.Thread.Sleep(100);
                     processes[0].Kill();    
                     Console.WriteLine("Notepad file closed!!!");
 
