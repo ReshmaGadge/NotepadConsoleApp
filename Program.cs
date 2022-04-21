@@ -187,15 +187,20 @@ namespace AutoNotepadApp
                         System.Threading.Thread.Sleep(2000);
                     }
 
-                    if(File.Exists(file))
+                    // to close notepad file
+                    System.Threading.Thread.Sleep(2000);
+                    processes[0].Kill();    
+                    Console.WriteLine("Notepad file closed!!!");
+
+                    // to check whether file created or not
+                    if (File.Exists(file))
                     {
                         Console.WriteLine("Task Completed Successfully!!!");
                     }
                     else
                     {
                         Console.WriteLine("Task failed :(");
-                    }
-
+                    }                                        
                 }
 
                 if (processes.Length == 0)
